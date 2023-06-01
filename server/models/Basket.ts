@@ -3,6 +3,7 @@ import {
   AutoIncrement,
   BelongsTo,
   Column,
+  ForeignKey,
   HasMany,
   Model,
   NotEmpty,
@@ -17,6 +18,7 @@ import User from './User'
   timestamps: true,
 })
 export default class Basket extends Model {
+  @ForeignKey(() => User)
   @AutoIncrement
   @PrimaryKey
   @Column

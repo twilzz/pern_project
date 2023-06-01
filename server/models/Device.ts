@@ -3,6 +3,7 @@ import {
   AutoIncrement,
   BelongsTo,
   Column,
+  ForeignKey,
   HasMany,
   Model,
   NotEmpty,
@@ -20,6 +21,8 @@ import Type from './Type'
   timestamps: true,
 })
 export default class Device extends Model {
+  @ForeignKey(() => Type)
+  @ForeignKey(() => Brand)
   @AutoIncrement
   @PrimaryKey
   @Column

@@ -26,7 +26,7 @@ export default class Brand extends Model {
   @AllowNull(false)
   @NotEmpty
   @Column
-  name: number | undefined
+  name!: string
 
   @HasMany(() => Device)
   devices!: Device[]

@@ -3,6 +3,7 @@ import {
   AutoIncrement,
   BelongsTo,
   Column,
+  ForeignKey,
   Model,
   NotEmpty,
   PrimaryKey,
@@ -16,6 +17,8 @@ import User from './User'
   timestamps: true,
 })
 export default class Rating extends Model {
+  @ForeignKey(() => User)
+  @ForeignKey(() => Device)
   @AutoIncrement
   @PrimaryKey
   @Column

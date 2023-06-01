@@ -3,6 +3,7 @@ import {
   AutoIncrement,
   BelongsTo,
   Column,
+  ForeignKey,
   Model,
   NotEmpty,
   PrimaryKey,
@@ -16,6 +17,8 @@ import Device from './Device'
   timestamps: true,
 })
 export default class Basket_content extends Model {
+  @ForeignKey(() => Basket)
+  @ForeignKey(() => Device)
   @AutoIncrement
   @PrimaryKey
   @Column
