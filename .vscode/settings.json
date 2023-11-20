@@ -6,7 +6,8 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    "server/node_modules": true
+    "server/node_modules": true,
+    "client/node_modules": true
   },
-  "hide-files.files": ["server/node_modules"]
+  "hide-files.files": ["server/node_modules", "client/node_modules"]
 }
