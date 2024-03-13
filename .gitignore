@@ -1,3 +1,4 @@
 /server/node_modules
-/clent/node_modules
+/client/node_modules
+/client/public
 .vscode/
