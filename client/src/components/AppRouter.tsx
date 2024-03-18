@@ -3,11 +3,14 @@ import { authRoutes, publicRoutes } from '../utils/routes'
 import { useStore } from './StoreContext'
 
 export const AppRouter = () => {
-  const { isAuth } = useStore()
+  const { user } = useStore()
+
+  if (!user) return null
+
   return (
     <Router>
       <Routes>
-        {isAuth &&
+        {user.isAuth &&
           authRoutes.map(({ path, Component }) => (
             <Route element={<Component />} path={path} />
           ))}
@@ -17,24 +20,25 @@ export const AppRouter = () => {
         {/* <Navigate to={ROUTES.SHOP} /> */}
       </Routes>
 
-      <div>
-        <ul>
-          <li>
-            <Link to="/">Shop</Link>
-          </li>
-          <li>
-            <Link to="admin">Admin</Link>
-          </li>
-          <li>
-            <Link to="auth">Auth</Link>
-          </li>
-          <li>
-            <Link to="device">Device</Link>
-          </li>
-          <li>
-            <Link to="basket">Basket</Link>
-          </li>
-        </ul>
+      <div className="absolute flex">
+        <div className="border p-2 hover:bg-slate-300">
+          <Link to="/">Shop</Link>
+        </div>
+        <div className="border p-2 hover:bg-slate-300">
+          <Link to="admin">Admin</Link>
+        </div>
+        <div className="border p-2 hover:bg-slate-300">
+          <Link to="auth">Auth</Link>
+        </div>
+        <div className="border p-2 hover:bg-slate-300">
+          <Link to="auth">Auth</Link>
+        </div>
+        <div className="border p-2 hover:bg-slate-300">
+          <Link to="device">Device</Link>
+        </div>
+        <div className="border p-2 hover:bg-slate-300">
+          <Link to="basket">Basket</Link>
+        </div>
       </div>
     </Router>
   )
