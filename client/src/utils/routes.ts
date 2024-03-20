@@ -5,13 +5,13 @@ import { ShopPage } from '../pages/ShopPage'
 import { ROUTES } from './constants'
 
 export const authRoutes = [
-  { path: ROUTES.ADMIN, Component: AdminPage },
-  { path: ROUTES.BASKET, Component: BasketPage },
+  { path: ROUTES.ADMIN, Component: AdminPage, name: 'Admin' },
+  { path: ROUTES.BASKET, Component: BasketPage, name: 'Basket' },
 ]
 
 export const publicRoutes = [
-  { path: ROUTES.SHOP, Component: ShopPage },
-  { path: ROUTES.REGISTRATION, Component: AuthPage },
-  { path: ROUTES.LOGIN, Component: AuthPage },
-  { path: ROUTES.DEVICE + '/:id', Component: AdminPage },
+  { path: ROUTES.SHOP, Component: ShopPage, name: 'Main' },
+  { path: ROUTES.REGISTRATION, Component: AuthPage, name: 'Registration' },
+  { path: ROUTES.LOGIN, Component: AuthPage, name: 'Login' },
+  { path: ROUTES.DEVICE + '/:id', Component: AdminPage, name: 'Devices' },
 ]

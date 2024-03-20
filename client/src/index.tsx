@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { App } from './App'
 import { UserStoreContext } from './components/StoreContext'
-import './index.css'
+import './global.css'
 import DeviceStore from './store/DeviceStore'
 import UserStore from './store/UserStore'
 
@@ -11,7 +12,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <UserStoreContext.Provider
       value={{ user: new UserStore(), devices: new DeviceStore() }}
     >
-      <App />
+      <Router>
+        <App />
+      </Router>
     </UserStoreContext.Provider>
   </React.StrictMode>
 )
