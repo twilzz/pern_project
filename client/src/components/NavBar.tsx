@@ -11,31 +11,33 @@ export const NavBar = () => {
   const location = useLocation()
   console.log(location.pathname)
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        {publicRoutes.map((route) => (
-          <NavigationMenuItem
-            key={route.path}
-            className={cn(
-              'hover:bg-slate-300 p-2 clsx',
-              route.path === location.pathname && 'bg-slate-300'
-            )}
-          >
-            <Link to={route.path}>{route.name}</Link>
-          </NavigationMenuItem>
-        ))}
-        {authRoutes.map((route) => (
-          <NavigationMenuItem
-            key={route.path}
-            className={cn(
-              'hover:bg-slate-300 p-2 clsx',
-              route.path === location.pathname && 'bg-slate-300'
-            )}
-          >
-            <Link to={route.path}>{route.name}</Link>
-          </NavigationMenuItem>
-        ))}
-      </NavigationMenuList>
-    </NavigationMenu>
+    <nav className="w-full bg-slate-200">
+      <NavigationMenu>
+        <NavigationMenuList>
+          {publicRoutes.map((route) => (
+            <NavigationMenuItem
+              key={route.path}
+              className={cn(
+                'hover:bg-slate-300 p-2 clsx',
+                route.path === location.pathname && 'bg-slate-300'
+              )}
+            >
+              <Link to={route.path}>{route.name}</Link>
+            </NavigationMenuItem>
+          ))}
+          {authRoutes.map((route) => (
+            <NavigationMenuItem
+              key={route.path}
+              className={cn(
+                'hover:bg-slate-300 p-2 clsx',
+                route.path === location.pathname && 'bg-slate-300'
+              )}
+            >
+              <Link to={route.path}>{route.name}</Link>
+            </NavigationMenuItem>
+          ))}
+        </NavigationMenuList>
+      </NavigationMenu>
+    </nav>
   )
 }
