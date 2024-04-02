@@ -15,3 +15,8 @@ export const publicRoutes = [
   { path: ROUTES.LOGIN, Component: AuthPage, name: 'Login' },
   { path: ROUTES.DEVICE + '/:id', Component: AdminPage, name: 'Devices' },
 ]
+
+export const editorRoutes = [
+  { path: ROUTES.ADD_DEVICE, Component: ShopPage, name: 'Main' },
+  { path: ROUTES.MANAGE_DEVICE, Component: AdminPage, name: 'Devices' },
+]

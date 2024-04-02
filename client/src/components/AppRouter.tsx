@@ -16,7 +16,6 @@ export const AppRouter = () => {
       {publicRoutes.map(({ path, Component }) => (
         <Route element={<Component />} path={path} key={path} />
       ))}
-      {/* <Navigate to={ROUTES.SHOP} /> */}
     </Routes>
   )
 }

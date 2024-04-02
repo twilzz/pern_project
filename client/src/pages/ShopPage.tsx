@@ -1,83 +1,36 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { ReactNode } from 'react'
-
-const products = [
-  {
-    id: 1,
-    title: 'title 1',
-    description:
-      'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat, perferendis?',
-    rating: 4,
-  },
-  {
-    id: 1,
-    title: 'title 1',
-    description:
-      'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat, perferendis?',
-    rating: 4,
-  },
-  {
-    id: 1,
-    title: 'title 1',
-    description:
-      'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat, perferendis?',
-    rating: 4,
-  },
-  {
-    id: 1,
-    title: 'title 1',
-    description:
-      'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat, perferendis?',
-    rating: 3,
-  },
-]
+import { StorePagination } from '@/components/Pagination'
+import { ShopCard } from '@/components/ShopCard'
+import { phones } from '@/utils/dataSource'
+import { useState } from 'react'
 
 export const ShopPage = () => {
+  const [page, setPage] = useState(0)
+  const pageSize = 6
+  const totalPages = Math.round(phones.length / pageSize)
+
   return (
-    <div>
+    <div className="flex flex-col items-center gap-10">
       <h1>Shop Page!</h1>
-      <div>
-        {products.map(({ id, title, description, rating }) => (
-          <ShopCard
-            key={id}
-            title={title}
-            description={description}
-            content={description}
-            footer={rating}
-          />
-        ))}
+      <div className="grid grid-cols-3 gap-4 w-7/12">
+        {phones
+          .slice(page * pageSize, page * pageSize + pageSize)
+          .map(({ id, model, description, rating, price, brand }) => (
+            <ShopCard
+              key={id}
+              id={id}
+              title={model}
+              description={brand}
+              content={description}
+              footer={rating}
+              price={price}
+            />
+          ))}
       </div>
+      <StorePagination
+        currentPage={page}
+        setPage={setPage}
+        totalPages={totalPages}
+      />
     </div>
-  )
-}
-
-interface ShopCardProps {
-  title: string
-  description: string
-  content: string
-  footer: ReactNode | string
-}
-
-const ShopCard = ({ title, description, content, footer }: ShopCardProps) => {
-  return (
-    <Card className="w-[300px]">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>{content}</p>
-      </CardContent>
-      <CardFooter>
-        <p>{footer}</p>
-      </CardFooter>
-    </Card>
   )
 }
