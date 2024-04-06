@@ -10,6 +10,7 @@ export const ShopPage = () => {
 
   return (
     <div className="flex flex-col items-center gap-10">
+    <div className="flex flex-col items-center gap-10">
       <h1>Shop Page!</h1>
       <div className="grid grid-cols-3 gap-4 w-7/12">
         {phones
