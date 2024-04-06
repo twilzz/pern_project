@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
+import RootStore from './RootStore'
 
-interface IDeviceStore {
+export interface IDeviceStore {
   type: { id: number; name: string }[]
   brands: { id: number; name: string }[]
   devices: {
@@ -13,6 +14,7 @@ interface IDeviceStore {
 }
 
 export default class DeviceStore implements IDeviceStore {
+  private rootStore: RootStore
   private _type: IDeviceStore['type'] = [
     { id: 1, name: 'Холодильники' },
     { id: 2, name: 'Смартфоны' },
@@ -45,29 +47,30 @@ export default class DeviceStore implements IDeviceStore {
     },
   ]
 
-  constructor() {
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore
     makeAutoObservable(this)
   }
 
   public get type() {
-    return this._type
+    return this.rootStore.deviceStore._type
   }
 
   public get brands() {
-    return this._brands
+    return this.rootStore.deviceStore._brands
   }
 
   public get devices() {
-    return this._devices
+    return this.rootStore.deviceStore._devices
   }
 
   public setType(type: IDeviceStore['type']): void {
-    this._type = type
+    this.rootStore.deviceStore._type = type
   }
   public setBrands(brands: IDeviceStore['brands']) {
-    this._brands = brands
+    this.rootStore.deviceStore._brands = brands
   }
   public setDevices(devices: IDeviceStore['devices']) {
-    this._devices = devices
+    this.rootStore.deviceStore._devices = devices
   }
 }

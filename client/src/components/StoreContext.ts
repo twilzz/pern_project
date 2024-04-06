@@ -1,14 +1,12 @@
+import RootStore from '@/store/RootStore'
 import { createContext, useContext } from 'react'
-import DeviceStore from '../store/DeviceStore'
-import UserStore from '../store/UserStore'
 
-export const UserStoreContext = createContext<{
-  user: UserStore | null
-  devices: DeviceStore | null
+export const StoreContext = createContext<{
+  store: RootStore | null
 } | null>(null)
 
 export const useStore = () => {
-  const context = useContext(UserStoreContext)
+  const context = useContext(StoreContext)
 
   if (!context) {
     throw new Error('')

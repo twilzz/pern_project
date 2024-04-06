@@ -3,13 +3,16 @@ import { authRoutes, publicRoutes } from '../utils/routes'
 import { useStore } from './StoreContext'
 
 export const AppRouter = () => {
-  const { user } = useStore()
+  const { store } = useStore()
+  const userData = store?.userStore
 
-  if (!user) return null
+  if (!userData?.user) return null
+
+  console.log('User', userData)
 
   return (
     <Routes>
-      {user.isAuth &&
+      {userData?.isAuth &&
         authRoutes.map(({ path, Component }) => (
           <Route element={<Component />} path={path} key={path} />
         ))}

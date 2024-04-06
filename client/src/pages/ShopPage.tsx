@@ -9,10 +9,9 @@ export const ShopPage = () => {
   const totalPages = Math.round(phones.length / pageSize)
 
   return (
-    <div className="flex flex-col items-center gap-10">
-    <div className="flex flex-col items-center gap-10">
+    <div className="flex flex-col items-center">
       <h1>Shop Page!</h1>
-      <div className="grid grid-cols-3 gap-4 w-7/12">
+      <div className="grid grid-cols-3 gap-4 mb-4">
         {phones
           .slice(page * pageSize, page * pageSize + pageSize)
           .map(({ id, model, description, rating, price, brand }) => (

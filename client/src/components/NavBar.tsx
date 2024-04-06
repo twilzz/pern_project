@@ -9,7 +9,6 @@ import {
 
 export const NavBar = () => {
   const location = useLocation()
-  console.log(location.pathname)
   return (
     <nav className="w-full bg-slate-200">
       <NavigationMenu>
