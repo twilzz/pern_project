@@ -8,7 +8,7 @@ export const AppRouter = () => {
 
   if (!userData?.user) return null
 
-  console.log('User', userData)
+  console.log('User', userData.user.name)
 
   return (
     <Routes>

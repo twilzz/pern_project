@@ -1,3 +1,5 @@
+import { BrandFilterBar } from '@/components/BrandFilterBar'
+import { MenuBar } from '@/components/MenuBar'
 import { StorePagination } from '@/components/Pagination'
 import { ShopCard } from '@/components/ShopCard'
 import { phones } from '@/utils/dataSource'
@@ -11,26 +13,34 @@ export const ShopPage = () => {
   return (
     <div className="flex flex-col items-center">
       <h1>Shop Page!</h1>
-      <div className="grid grid-cols-3 gap-4 mb-4">
-        {phones
-          .slice(page * pageSize, page * pageSize + pageSize)
-          .map(({ id, model, description, rating, price, brand }) => (
-            <ShopCard
-              key={id}
-              id={id}
-              title={model}
-              description={brand}
-              content={description}
-              footer={rating}
-              price={price}
+      <div className="w-8/12">
+        <BrandFilterBar />
+        <div className="flex gap-3">
+          <MenuBar />
+          <div>
+            <div className="grid grid-cols-3 gap-4 mb-4 justify-between">
+              {phones
+                .slice(page * pageSize, page * pageSize + pageSize)
+                .map(({ id, model, description, rating, price, brand }) => (
+                  <ShopCard
+                    key={id}
+                    id={id}
+                    title={model}
+                    description={brand}
+                    content={description}
+                    footer={rating}
+                    price={price}
+                  />
+                ))}
+            </div>
+            <StorePagination
+              currentPage={page}
+              setPage={setPage}
+              totalPages={totalPages}
             />
-          ))}
+          </div>
+        </div>
       </div>
-      <StorePagination
-        currentPage={page}
-        setPage={setPage}
-        totalPages={totalPages}
-      />
     </div>
   )
 }

@@ -1,5 +1,4 @@
 import { makeAutoObservable } from 'mobx'
-import RootStore from './RootStore'
 
 export interface IUser {
   name: string
@@ -14,25 +13,23 @@ export interface IUserStore {
 export default class UserStore implements IUserStore {
   private _isAuth = false
   private _user: IUser | null = { name: 'Alex Twils', age: 37 }
-  private rootStore: RootStore
 
-  constructor(rootStore: RootStore) {
-    this.rootStore = rootStore
+  constructor() {
     makeAutoObservable(this)
   }
 
   public get user() {
-    return this.rootStore.userStore._user
+    return this._user
   }
 
   public get isAuth() {
-    return this.rootStore.userStore._isAuth
+    return this._isAuth
   }
 
   public setIsAuth(state: boolean): void {
-    this.rootStore.userStore._isAuth = state
+    this._isAuth = state
   }
   public setUser(userData: IUser) {
-    this.rootStore.userStore._user = userData
+    this._user = userData
   }
 }

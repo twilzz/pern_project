@@ -1,8 +1,8 @@
-import RootStore from '@/store/RootStore'
+import { RootStore } from '@/store/RootStore'
 import { createContext, useContext } from 'react'
 
 export const StoreContext = createContext<{
-  store: RootStore | null
+  store: RootStore
 } | null>(null)
 
 export const useStore = () => {
