@@ -8,12 +8,14 @@ import { generateJwt } from '../utils/generateToken'
 class UserController {
   async registration(req: Request, res: Response, next: NextFunction) {
     const { email, password, role } = req.body
+    console.log('DING', email, password)
+
     if (!email || !password) {
       return next(ApiError.badRequest('Invalid email or password'))
     }
     const candidate = await User.findOne({ where: { email } })
     if (candidate) {
-      return next(ApiError.badRequest('User with this email already exists'))
+      return next(ApiError.forbidden('User with this email already exists'))
     }
     const hashPassword = await bcrypt.hash(password, 5)
     const user = await User.create({ email, role, password: hashPassword })
@@ -23,7 +25,6 @@ class UserController {
   }
 
   async login(req: Request, res: Response, next: NextFunction) {
-
     const { email, password } = req.body
     const user = await User.findOne({ where: { email } })
     if (!user) {

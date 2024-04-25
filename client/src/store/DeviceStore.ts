@@ -12,6 +12,7 @@ export interface IDeviceStore {
     rating: number
   }[]
   selectedType: number | null
+  selectedBrands: { id: number; name: string }[]
 }
 
 export default class DeviceStore implements IDeviceStore {
@@ -207,6 +208,8 @@ export default class DeviceStore implements IDeviceStore {
   ]
   private _selectedType: IDeviceStore['selectedType'] = null
 
+  private _selectedBrands: IDeviceStore['selectedBrands'] = []
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -227,6 +230,10 @@ export default class DeviceStore implements IDeviceStore {
     return this._selectedType
   }
 
+  public get selectedBrands() {
+    return this._selectedBrands
+  }
+
   public setType = (type: IDeviceStore['type']): void => {
     this._type = type
   }
@@ -238,5 +245,18 @@ export default class DeviceStore implements IDeviceStore {
   }
   public setSelectedType = (type: number | null) => {
     this._selectedType = type
+  }
+
+  public setSelectedBrands = (brand: IDeviceStore['brands'][number]) => {
+    const brandInList = Boolean(
+      this._selectedBrands?.find((sB) => sB.id === brand.id)
+    )
+    if (brandInList) {
+      const newList = this._selectedBrands.filter((sB) => sB.id !== brand.id)
+      this._selectedBrands = newList
+    } else {
+      const newList = this._selectedBrands.concat(brand)
+      this._selectedBrands = newList
+    }
   }
 }

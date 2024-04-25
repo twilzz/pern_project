@@ -23,7 +23,7 @@ server.use(errorHandler)
 const start = async () => {
   try {
     await sequelize.authenticate()
-    await sequelize.sync()
+    // await sequelize.sync()
     server.listen(PORT, () => console.log(`SERVER IS UP on ${PORT}`))
   } catch (error) {
     console.log(error)

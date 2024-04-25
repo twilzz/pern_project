@@ -1,3 +1,4 @@
+import { DevicePage } from '@/pages/DevicePage'
 import { AdminPage } from '../pages/AdminPage'
 import { AuthPage } from '../pages/AuthPage'
 import { BasketPage } from '../pages/BasketPage'
@@ -13,7 +14,7 @@ export const publicRoutes = [
   { path: ROUTES.SHOP, Component: ShopPage, name: 'Main' },
   { path: ROUTES.REGISTRATION, Component: AuthPage, name: 'Registration' },
   { path: ROUTES.LOGIN, Component: AuthPage, name: 'Login' },
-  { path: ROUTES.DEVICE + '/:id', Component: AdminPage, name: 'Devices' },
+  { path: ROUTES.DEVICE + '/:id', Component: DevicePage, name: 'Devices' },
 ]
 
 export const editorRoutes = [

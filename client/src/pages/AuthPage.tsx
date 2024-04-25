@@ -1,3 +1,4 @@
+import { registration } from '@/api/userApi'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -10,35 +11,50 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+// Minimum 4 characters, at least one uppercase letter, one lowercase letter, one number and one special character
 const passwordValidation = new RegExp(
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{4,}$/
 )
 
 const authSchema = z.object({
-  userName: z.string().min(4, {
+  email: z.string().min(4, {
     message: 'Username must be at least 4 character',
   }),
-  password: z
-    .string()
-    .min(4)
-    .regex(passwordValidation, { message: 'Your password is not valid' }),
+  password: z.string().min(4).regex(passwordValidation, {
+    message:
+      'Minimum 4 characters, at least one uppercase letter, one lowercase letter, one number and one special character',
+  }),
 })
 
 export const AuthPage = () => {
   const form = useForm<z.infer<typeof authSchema>>({
     resolver: zodResolver(authSchema),
     defaultValues: {
-      userName: '',
+      email: '',
       password: '',
     },
   })
 
+  const [formError, setFormError] = useState(null)
+
+  const signIn = async (email: string, password: string) => {
+    try {
+      return await registration(email, password)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data.message
+        setFormError(message)
+      }
+    }
+  }
+
   function onSubmit(values: z.infer<typeof authSchema>) {
-    console.log(values)
-    form.reset()
+    signIn(values.email, values.password)
   }
 
   return (
@@ -48,7 +64,7 @@ export const AuthPage = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="userName"
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>UserName</FormLabel>
@@ -71,14 +87,15 @@ export const AuthPage = () => {
                   <FormControl>
                     <Input placeholder="password" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  <FormDescription>You password.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <Button type="submit">Submit</Button>
+            {formError && (
+              <span className="ml-2 font-bold text-red-500">* {formError}</span>
+            )}
           </form>
         </Form>
       </div>

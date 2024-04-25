@@ -1,4 +1,6 @@
+import { ROUTES } from '@/utils/constants'
 import { ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from './ui/button'
 import {
   Card,
@@ -25,6 +27,7 @@ export const ShopCard = ({
   content,
   price,
 }: ShopCardProps) => {
+  const navigate = useNavigate()
   return (
     <Card className="w-[300px] min-h-[400px] flex flex-col justify-between hover:shadow-lg">
       <CardHeader>
@@ -39,7 +42,9 @@ export const ShopCard = ({
         <div className="font-medium mt-4">Price: {price}</div>
       </CardContent>
       <CardFooter className="flex justify-end">
-        <Button>Add to cart</Button>
+        <Button onClick={() => navigate(ROUTES.DEVICE + '/' + id)}>
+          Go to Device
+        </Button>
       </CardFooter>
     </Card>
   )

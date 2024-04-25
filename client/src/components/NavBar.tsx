@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
 import { authRoutes, publicRoutes } from '@/utils/routes'
 import { Link, useLocation } from 'react-router-dom'
+import { UserMenu } from './UserMenu'
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -10,7 +11,7 @@ import {
 export const NavBar = () => {
   const location = useLocation()
   return (
-    <nav className="w-full bg-slate-200">
+    <nav className="w-full pr-4 bg-slate-200 flex justify-between">
       <NavigationMenu>
         <NavigationMenuList>
           {publicRoutes.map((route) => (
@@ -37,6 +38,7 @@ export const NavBar = () => {
           ))}
         </NavigationMenuList>
       </NavigationMenu>
+      <UserMenu />
     </nav>
   )
 }

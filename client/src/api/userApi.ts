@@ -1,0 +1,23 @@
+import { host } from './axios'
+
+export const registration = async (email: string, password: string) => {
+  const response = await host.post('api/user/register', {
+    email,
+    password,
+    role: 'ADMIN',
+  })
+  return response
+}
+
+export const login = async (email: string, password: string) => {
+  const response = await host.post('api/user/login', {
+    email,
+    password,
+  })
+  return response
+}
+
+export const check = async () => {
+  const response = await host.post('api/auth')
+  return response
+}
