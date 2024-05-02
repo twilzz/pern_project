@@ -1,6 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { ROUTES } from '@/utils/constants'
+import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useStore } from './StoreContext'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,26 +12,64 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 
-export const UserMenu = () => {
+export const UserMenu = observer(() => {
+  const {
+    store: { userStore },
+  } = useStore()
+
+  const currentUser = userStore.user
+
   const [menuIsOpen, setMenuIsOpen] = useState(false)
   const navigate = useNavigate()
   return (
     <>
       <DropdownMenu open={menuIsOpen} onOpenChange={() => setMenuIsOpen(false)}>
         <DropdownMenuTrigger asChild>
-          <Avatar onClick={() => setMenuIsOpen(true)}>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
+          <Avatar
+            onClick={() => setMenuIsOpen(true)}
+            className="cursor-pointer"
+          >
+            <AvatarImage src={currentUser?.avatar} />
+            <AvatarFallback>
+              {getInitialsFromName(currentUser?.name ?? 'Unknown User')}
+            </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>User</DropdownMenuLabel>
-          <DropdownMenuItem>Create Account</DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => navigate('/login')}>
-            Login
-          </DropdownMenuItem>
+          <DropdownMenuLabel>
+            {currentUser?.name ? currentUser?.name : 'Unregistered user'}
+          </DropdownMenuLabel>
+          {userStore.isAuth ? (
+            <DropdownMenuItem
+              onSelect={() => navigate('/login')}
+              className="cursor-pointer"
+            >
+              Logout
+            </DropdownMenuItem>
+          ) : (
+            <>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={() => navigate(ROUTES.REGISTRATION)}
+              >
+                Create Account
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => navigate(ROUTES.LOGIN)}
+                className="cursor-pointer"
+              >
+                Login
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
   )
+})
+
+function getInitialsFromName(name: string) {
+  const separatedName = name.split(' ')
+  const initials = separatedName.map((word) => word.split('')[0])
+  return initials.join('')
 }

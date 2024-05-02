@@ -1,12 +1,11 @@
 import {
-  AllowNull,
   AutoIncrement,
   BelongsTo,
   Column,
+  DataType,
   ForeignKey,
   HasMany,
   Model,
-  NotEmpty,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript'
@@ -18,19 +17,14 @@ import User from './User'
   timestamps: true,
 })
 export default class Basket extends Model {
-  @ForeignKey(() => User)
-  @AutoIncrement
   @PrimaryKey
-  @Column
-  id!: number
-
-  @AllowNull(false)
-  @NotEmpty
-  @Column
-  user_id!: number
+  @AutoIncrement
+  @ForeignKey(() => User)
+  @Column({ type: DataType.INTEGER })
+  basketId: number | undefined
 
   @BelongsTo(() => User)
-  userId!: User
+  user?: User
 
   @HasMany(() => Basket_content)
   content!: Basket_content[]

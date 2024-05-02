@@ -12,9 +12,12 @@ export const authRoutes = [
 
 export const publicRoutes = [
   { path: ROUTES.SHOP, Component: ShopPage, name: 'Main' },
+  { path: ROUTES.DEVICE + '/:id', Component: DevicePage, name: 'Devices' },
+]
+
+export const userRoutes = [
   { path: ROUTES.REGISTRATION, Component: AuthPage, name: 'Registration' },
   { path: ROUTES.LOGIN, Component: AuthPage, name: 'Login' },
-  { path: ROUTES.DEVICE + '/:id', Component: DevicePage, name: 'Devices' },
 ]
 
 export const editorRoutes = [

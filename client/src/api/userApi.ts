@@ -1,4 +1,5 @@
 import { host } from './axios'
+import { JwtPayload, jwtDecode } from 'jwt-decode'
 
 export const registration = async (email: string, password: string) => {
   const response = await host.post('api/user/register', {
@@ -6,7 +7,8 @@ export const registration = async (email: string, password: string) => {
     password,
     role: 'ADMIN',
   })
-  return response
+  const decoded = jwtDecode<JwtPayload>(response.data.token)
+  return decoded
 }
 
 export const login = async (email: string, password: string) => {
@@ -14,7 +16,8 @@ export const login = async (email: string, password: string) => {
     email,
     password,
   })
-  return response
+  const decoded = jwtDecode<JwtPayload>(response.data.token)
+  return decoded
 }
 
 export const check = async () => {

@@ -10,12 +10,10 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { ROUTES } from '@/utils/constants'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useLocation } from 'react-router-dom'
 import { z } from 'zod'
 
 // Minimum 4 characters, at least one uppercase letter, one lowercase letter, one number and one special character
@@ -33,10 +31,7 @@ const authSchema = z.object({
   }),
 })
 
-export const AuthPage = () => {
-  const { pathname } = useLocation()
-  const isRegisterForm = pathname === ROUTES.REGISTRATION
-
+export const UserForm = () => {
   const form = useForm<z.infer<typeof authSchema>>({
     resolver: zodResolver(authSchema),
     defaultValues: {
@@ -67,7 +62,6 @@ export const AuthPage = () => {
   return (
     <div className="w-full flex items-center justify-center pt-8">
       <div className="w-[400px] rounded-lg border p-4 shadow-lg">
-        {isRegisterForm ? 'REGISTER' : 'LOGIN'}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField

@@ -1,7 +1,7 @@
 export const ROUTES = {
   ADMIN: '/admin',
   LOGIN: '/login',
-  REGISTRATION: '/auth',
+  REGISTRATION: '/register',
   SHOP: '/',
   DEVICE: '/device',
   BASKET: '/basket',

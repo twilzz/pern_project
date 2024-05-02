@@ -2,7 +2,8 @@ import { makeAutoObservable } from 'mobx'
 
 export interface IUser {
   name: string
-  age: number
+  age?: number
+  avatar?: string
 }
 
 export interface IUserStore {
@@ -12,7 +13,7 @@ export interface IUserStore {
 
 export default class UserStore implements IUserStore {
   private _isAuth = false
-  private _user: IUser | null = { name: 'Alex Twils', age: 37 }
+  private _user: IUser | null = null
 
   constructor() {
     makeAutoObservable(this)

@@ -19,7 +19,14 @@ class UserController {
     }
     const hashPassword = await bcrypt.hash(password, 5)
     const user = await User.create({ email, role, password: hashPassword })
-    const basket = await Basket.create({ userId: user.id })
+    console.log('USER', user.id)
+
+    try {
+      const basket = await Basket.create({ userId: user.id })
+    } catch (error) {
+      console.log('ERROR in Basket Creation process', error)
+    }
+
     const token = generateJwt(user.id, email, role)
     return res.json({ token })
   }
