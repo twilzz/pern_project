@@ -17,7 +17,7 @@ import axios from 'axios'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 // Minimum 4 characters, at least one uppercase letter, one lowercase letter, one number and one special character
@@ -42,6 +42,7 @@ export const AuthPage = observer(() => {
     },
   } = useStore()
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const isRegisterForm = pathname === ROUTES.REGISTRATION
 
   const form = useForm<z.infer<typeof authSchema>>({
@@ -59,6 +60,7 @@ export const AuthPage = observer(() => {
       const response = await registration(email, password)
       setUser(response)
       setIsAuth(true)
+      navigate(ROUTES.SHOP)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message = error.response?.data.message
@@ -72,6 +74,7 @@ export const AuthPage = observer(() => {
       const response = await login(email, password)
       setUser(response)
       setIsAuth(true)
+      navigate(ROUTES.SHOP)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message = error.response?.data.message

@@ -21,8 +21,6 @@ export const UserMenu = observer(() => {
 
   const currentUser = user
 
-  console.log(currentUser?.email)
-
   const [menuIsOpen, setMenuIsOpen] = useState(false)
   const navigate = useNavigate()
   return (
@@ -41,18 +39,30 @@ export const UserMenu = observer(() => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>
-            {currentUser?.name ? currentUser?.name : 'Unregistered user'}
+            {isAuth
+              ? currentUser?.name
+                ? currentUser?.name
+                : 'Unnamed user'
+              : 'Unregistered user'}
           </DropdownMenuLabel>
           {isAuth ? (
-            <DropdownMenuItem
-              onSelect={() => {
-                setIsAuth(false)
-                setUser(null)
-              }}
-              className="cursor-pointer"
-            >
-              Logout
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuItem
+                onSelect={() => navigate(ROUTES.USER)}
+                className="cursor-pointer"
+              >
+                Edit user
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {
+                  setIsAuth(false)
+                  setUser(null)
+                }}
+                className="cursor-pointer"
+              >
+                Logout
+              </DropdownMenuItem>
+            </>
           ) : (
             <>
               <DropdownMenuItem

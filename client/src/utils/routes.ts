@@ -1,4 +1,5 @@
 import { DevicePage } from '@/pages/DevicePage'
+import { UserPage } from '@/pages/UserPage'
 import { AdminPage } from '../pages/AdminPage'
 import { AuthPage } from '../pages/AuthPage'
 import { BasketPage } from '../pages/BasketPage'
@@ -18,6 +19,7 @@ export const publicRoutes = [
 export const userRoutes = [
   { path: ROUTES.REGISTRATION, Component: AuthPage, name: 'Registration' },
   { path: ROUTES.LOGIN, Component: AuthPage, name: 'Login' },
+  { path: ROUTES.USER, Component: UserPage, name: 'User' },
 ]
 
 export const editorRoutes = [
