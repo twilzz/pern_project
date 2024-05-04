@@ -14,10 +14,14 @@ import {
 
 export const UserMenu = observer(() => {
   const {
-    store: { userStore },
+    store: {
+      userStore: { setIsAuth, setUser, user, isAuth },
+    },
   } = useStore()
 
-  const currentUser = userStore.user
+  const currentUser = user
+
+  console.log(currentUser?.email)
 
   const [menuIsOpen, setMenuIsOpen] = useState(false)
   const navigate = useNavigate()
@@ -39,9 +43,12 @@ export const UserMenu = observer(() => {
           <DropdownMenuLabel>
             {currentUser?.name ? currentUser?.name : 'Unregistered user'}
           </DropdownMenuLabel>
-          {userStore.isAuth ? (
+          {isAuth ? (
             <DropdownMenuItem
-              onSelect={() => navigate('/login')}
+              onSelect={() => {
+                setIsAuth(false)
+                setUser(null)
+              }}
               className="cursor-pointer"
             >
               Logout

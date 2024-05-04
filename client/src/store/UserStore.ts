@@ -1,7 +1,9 @@
 import { makeAutoObservable } from 'mobx'
 
 export interface IUser {
-  name: string
+  email: string
+  role: string
+  name?: string
   age?: number
   avatar?: string
 }
@@ -27,10 +29,7 @@ export default class UserStore implements IUserStore {
     return this._isAuth
   }
 
-  public setIsAuth(state: boolean): void {
-    this._isAuth = state
-  }
-  public setUser(userData: IUser) {
-    this._user = userData
-  }
+  public setIsAuth = (state: boolean) => (this._isAuth = state)
+
+  public setUser = (userData: IUser | null) => (this._user = userData)
 }

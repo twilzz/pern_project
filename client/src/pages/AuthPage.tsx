@@ -1,4 +1,5 @@
-import { registration } from '@/api/userApi'
+import { login, registration } from '@/api/userApi'
+import { useStore } from '@/components/StoreContext'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -13,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { ROUTES } from '@/utils/constants'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
+import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
@@ -33,7 +35,12 @@ const authSchema = z.object({
   }),
 })
 
-export const AuthPage = () => {
+export const AuthPage = observer(() => {
+  const {
+    store: {
+      userStore: { setIsAuth, setUser, isAuth, user },
+    },
+  } = useStore()
   const { pathname } = useLocation()
   const isRegisterForm = pathname === ROUTES.REGISTRATION
 
@@ -50,8 +57,8 @@ export const AuthPage = () => {
   const signIn = async (email: string, password: string) => {
     try {
       const response = await registration(email, password)
-      console.log(response)
-      return response
+      setUser(response)
+      setIsAuth(true)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message = error.response?.data.message
@@ -60,53 +67,75 @@ export const AuthPage = () => {
     }
   }
 
+  const logIn = async (email: string, password: string) => {
+    try {
+      const response = await login(email, password)
+      setUser(response)
+      setIsAuth(true)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data.message
+        setFormError(message)
+      }
+    }
+  }
+
+  console.log(isAuth, user)
+
   function onSubmit(values: z.infer<typeof authSchema>) {
-    signIn(values.email, values.password)
+    isRegisterForm
+      ? signIn(values.email, values.password)
+      : logIn(values.email, values.password)
   }
 
   return (
     <div className="w-full flex items-center justify-center pt-8">
       <div className="w-[400px] rounded-lg border p-4 shadow-lg">
-        {isRegisterForm ? 'REGISTER' : 'LOGIN'}
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>UserName</FormLabel>
-                  <FormControl>
-                    <Input placeholder="userName" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
+        {isAuth ? (
+          'you have been logged in'
+        ) : (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>UserName</FormLabel>
+                    <FormControl>
+                      <Input placeholder="userName" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is your public display name.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="password" {...field} />
+                    </FormControl>
+                    <FormDescription>You password.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Submit</Button>
+              {formError && (
+                <span className="ml-2 font-bold text-red-500">
+                  * {formError}
+                </span>
               )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input placeholder="password" {...field} />
-                  </FormControl>
-                  <FormDescription>You password.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Submit</Button>
-            {formError && (
-              <span className="ml-2 font-bold text-red-500">* {formError}</span>
-            )}
-          </form>
-        </Form>
+            </form>
+          </Form>
+        )}
       </div>
     </div>
   )
-}
+})

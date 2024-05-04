@@ -1,5 +1,6 @@
-import { host } from './axios'
+import { IUser } from '@/store/UserStore'
 import { JwtPayload, jwtDecode } from 'jwt-decode'
+import { authHost, host } from './axios'
 
 export const registration = async (email: string, password: string) => {
   const response = await host.post('api/user/register', {
@@ -7,8 +8,9 @@ export const registration = async (email: string, password: string) => {
     password,
     role: 'ADMIN',
   })
+  localStorage.setItem('token', response.data.token)
   const decoded = jwtDecode<JwtPayload>(response.data.token)
-  return decoded
+  return decoded as IUser
 }
 
 export const login = async (email: string, password: string) => {
@@ -16,11 +18,14 @@ export const login = async (email: string, password: string) => {
     email,
     password,
   })
+  localStorage.setItem('token', response.data.token)
   const decoded = jwtDecode<JwtPayload>(response.data.token)
-  return decoded
+  return decoded as IUser
 }
 
 export const check = async () => {
-  const response = await host.post('api/auth')
-  return response
+  const response = await authHost.post('api/auth')
+  localStorage.setItem('token', response.data.token)
+  const decoded = jwtDecode<JwtPayload>(response.data.token)
+  return decoded as IUser
 }
