@@ -24,5 +24,5 @@ export const userRoutes = [
 
 export const editorRoutes = [
   { path: ROUTES.ADD_DEVICE, Component: ShopPage, name: 'Main' },
-  { path: ROUTES.MANAGE_DEVICE, Component: AdminPage, name: 'Devices' },
+  // { path: ROUTES.MANAGE_DEVICE, Component: AdminPage, name: 'Devices' },
 ]

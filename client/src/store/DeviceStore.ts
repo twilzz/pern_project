@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 
-export interface IDeviceStore {
+export interface IDevice {
   type: { id: number; name: string }[]
   brands: { id: number; name: string }[]
   devices: {
@@ -15,14 +15,14 @@ export interface IDeviceStore {
   selectedBrands: { id: number; name: string }[]
 }
 
-export default class DeviceStore implements IDeviceStore {
-  private _type: IDeviceStore['type'] = [
+export default class DeviceStore implements IDevice {
+  private _type: IDevice['type'] = [
     { id: 1, name: 'Холодильники' },
     { id: 2, name: 'Смартфоны' },
     { id: 3, name: 'Телевизоры' },
     { id: 4, name: 'Ноутбуки' },
   ]
-  private _brands: IDeviceStore['brands'] = [
+  private _brands: IDevice['brands'] = [
     { id: 1, name: 'Samsung' },
     { id: 2, name: 'Apple' },
     { id: 3, name: 'Lenovo' },
@@ -32,7 +32,7 @@ export default class DeviceStore implements IDeviceStore {
     { id: 7, name: 'Lumix' },
     { id: 8, name: 'Zenith' },
   ]
-  private _devices: IDeviceStore['devices'] = [
+  private _devices: IDevice['devices'] = [
     {
       id: 1,
       brand: 'Electra',
@@ -206,9 +206,9 @@ export default class DeviceStore implements IDeviceStore {
       rating: 4,
     },
   ]
-  private _selectedType: IDeviceStore['selectedType'] = null
+  private _selectedType: IDevice['selectedType'] = null
 
-  private _selectedBrands: IDeviceStore['selectedBrands'] = []
+  private _selectedBrands: IDevice['selectedBrands'] = []
 
   constructor() {
     makeAutoObservable(this)
@@ -234,20 +234,20 @@ export default class DeviceStore implements IDeviceStore {
     return this._selectedBrands
   }
 
-  public setType = (type: IDeviceStore['type']): void => {
+  public setType = (type: IDevice['type']): void => {
     this._type = type
   }
-  public setBrands = (brands: IDeviceStore['brands']) => {
+  public setBrands = (brands: IDevice['brands']) => {
     this._brands = brands
   }
-  public setDevice = (devices: IDeviceStore['devices']) => {
+  public setDevice = (devices: IDevice['devices']) => {
     this._devices = devices
   }
   public setSelectedType = (type: number | null) => {
     this._selectedType = type
   }
 
-  public setSelectedBrands = (brand: IDeviceStore['brands'][number]) => {
+  public setSelectedBrands = (brand: IDevice['brands'][number]) => {
     const brandInList = Boolean(
       this._selectedBrands?.find((sB) => sB.id === brand.id)
     )
