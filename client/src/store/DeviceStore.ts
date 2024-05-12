@@ -1,28 +1,40 @@
 import { makeAutoObservable } from 'mobx'
 
-export interface IDevice {
-  type: { id: number; name: string }[]
-  brands: { id: number; name: string }[]
-  devices: {
-    id: number
-    brand: string
-    model: string
-    description: string
-    price: number
-    rating: number
-  }[]
-  selectedType: number | null
-  selectedBrands: { id: number; name: string }[]
+export interface IDeviceType {
+  id: number
+  name: string
 }
 
-export default class DeviceStore implements IDevice {
-  private _type: IDevice['type'] = [
+export interface IDeviceBrand {
+  id: number
+  name: string
+}
+
+export interface IDevice {
+  id: number
+  brand: string
+  model: string
+  description: string
+  price: number
+  rating: number
+}
+
+export interface IDeviceStore {
+  type: IDeviceType[]
+  brands: IDeviceBrand[]
+  devices: IDevice[]
+  selectedType: IDeviceType[] | null
+  selectedBrands: IDeviceBrand[] | null
+}
+
+export default class DeviceStore implements IDeviceStore {
+  private _type: IDeviceType[] = [
     { id: 1, name: 'Холодильники' },
     { id: 2, name: 'Смартфоны' },
     { id: 3, name: 'Телевизоры' },
     { id: 4, name: 'Ноутбуки' },
   ]
-  private _brands: IDevice['brands'] = [
+  private _brands: IDeviceBrand[] = [
     { id: 1, name: 'Samsung' },
     { id: 2, name: 'Apple' },
     { id: 3, name: 'Lenovo' },
@@ -32,7 +44,7 @@ export default class DeviceStore implements IDevice {
     { id: 7, name: 'Lumix' },
     { id: 8, name: 'Zenith' },
   ]
-  private _devices: IDevice['devices'] = [
+  private _devices: IDeviceStore['devices'] = [
     {
       id: 1,
       brand: 'Electra',
@@ -206,9 +218,9 @@ export default class DeviceStore implements IDevice {
       rating: 4,
     },
   ]
-  private _selectedType: IDevice['selectedType'] = null
+  private _selectedType: IDeviceStore['selectedType'] = null
 
-  private _selectedBrands: IDevice['selectedBrands'] = []
+  private _selectedBrands: IDeviceStore['selectedBrands'] = []
 
   constructor() {
     makeAutoObservable(this)
@@ -234,29 +246,31 @@ export default class DeviceStore implements IDevice {
     return this._selectedBrands
   }
 
-  public setType = (type: IDevice['type']): void => {
+  public setType = (type: IDeviceType[]): void => {
     this._type = type
   }
-  public setBrands = (brands: IDevice['brands']) => {
+  public setBrands = (brands: IDeviceBrand[]) => {
     this._brands = brands
   }
-  public setDevice = (devices: IDevice['devices']) => {
+  public setDevice = (devices: IDeviceStore['devices']) => {
     this._devices = devices
   }
-  public setSelectedType = (type: number | null) => {
+  public setSelectedType = (type: IDeviceType[] | null) => {
     this._selectedType = type
   }
 
-  public setSelectedBrands = (brand: IDevice['brands'][number]) => {
-    const brandInList = Boolean(
-      this._selectedBrands?.find((sB) => sB.id === brand.id)
-    )
-    if (brandInList) {
-      const newList = this._selectedBrands.filter((sB) => sB.id !== brand.id)
-      this._selectedBrands = newList
-    } else {
-      const newList = this._selectedBrands.concat(brand)
-      this._selectedBrands = newList
+  public setSelectedBrands = (brand: IDeviceBrand | null) => {
+    if (this._selectedBrands && brand) {
+      const brandInList = Boolean(
+        this._selectedBrands?.find((sB) => sB.id === brand.id)
+      )
+      if (brandInList) {
+        const newList = this._selectedBrands.filter((sB) => sB.id !== brand.id)
+        this._selectedBrands = newList
+      } else {
+        const newList = this._selectedBrands.concat(brand)
+        this._selectedBrands = newList
+      }
     }
   }
 }

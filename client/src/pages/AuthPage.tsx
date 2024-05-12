@@ -38,7 +38,7 @@ const authSchema = z.object({
 export const AuthPage = observer(() => {
   const {
     store: {
-      userStore: { setIsAuth, setUser, isAuth, user },
+      userStore: { setIsAuth, setUser, isAuth },
     },
   } = useStore()
   const { pathname } = useLocation()
@@ -82,8 +82,6 @@ export const AuthPage = observer(() => {
       }
     }
   }
-
-  console.log(isAuth, user)
 
   function onSubmit(values: z.infer<typeof authSchema>) {
     isRegisterForm

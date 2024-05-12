@@ -1,14 +1,16 @@
+import { IDeviceType } from '@/store/DeviceStore'
 import { authHost, host } from './axios'
-import { IDevice } from '@/store/DeviceStore'
 
-export const createDeviceType = async (name: string) => {
-    console.log(name);
-    
-  const {data} = await authHost.post('api/type', name)
-  return data as IDevice['type']
+export const createDeviceType = async (typeName: string) => {
+  console.log('CLIENT API NAME', name)
+  const { data } = await authHost.post('api/type', { name: typeName })
+  return data as IDeviceType
 }
 
 export const getDeviceType = async () => {
-    const {data} = await host.get('api/type')
-    return data as IDevice['type']
+  const { data } = await host.get('api/type')
+  return data.map(({ id, name }: IDeviceType) => ({
+    id,
+    name,
+  })) as IDeviceType[]
 }
