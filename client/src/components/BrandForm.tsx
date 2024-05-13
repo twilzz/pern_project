@@ -1,4 +1,4 @@
-import { createDeviceType, getAllTypes } from '@/api/deviceApi'
+import { createBrand, getAllBrands } from '@/api/deviceApi'
 import axios from 'axios'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
@@ -27,42 +27,41 @@ import {
 import { Toaster } from './ui/toaster'
 import { toast } from './ui/use-toast'
 
-const deviceTypeSchema = z.object({
-  typeName: z
+const deviceBrandSchema = z.object({
+  brandName: z
     .string()
     .min(2, {
-      message: 'Too short type name',
+      message: 'Too short brand name',
     })
     .max(30, {
-      message: 'Too long type name',
+      message: 'Too long brand name',
     }),
 })
-
-export const TypeForm = observer(() => {
-  const form = useForm<z.infer<typeof deviceTypeSchema>>({
+export const BrandForm = observer(() => {
+  const form = useForm<z.infer<typeof deviceBrandSchema>>({
     defaultValues: {
-      typeName: '',
+      brandName: '',
     },
   })
 
   const {
     store: {
-      deviceStore: { setType, type },
+      deviceStore: { setBrands, brands },
     },
   } = useStore()
 
   useEffect(() => {
-    getAllTypes().then((data) => setType(data))
+    getAllBrands().then((data) => setBrands(data))
   }, [])
 
-  function onSubmit(data: z.infer<typeof deviceTypeSchema>) {
-    createDeviceType(data.typeName)
+  function onSubmit(data: z.infer<typeof deviceBrandSchema>) {
+    createBrand(data.brandName)
       .then((data) => {
         toast({
           title: 'Successfully created',
           description: `${data.name} was created`,
         })
-        getAllTypes().then((updatedData) => setType(updatedData))
+        getAllBrands().then((updatedData) => setBrands(updatedData))
         form.reset()
       })
       .catch((error) => {
@@ -84,19 +83,19 @@ export const TypeForm = observer(() => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="typeName"
+            name="brandName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Devices Type</FormLabel>
+                <FormLabel>Devices Brand</FormLabel>
                 <FormControl>
-                  <Input placeholder="Devices Type" {...field} />
+                  <Input placeholder="Devices brand" {...field} />
                 </FormControl>
-                <FormDescription>Enter Devices Type</FormDescription>
+                <FormDescription>Enter Brand Name</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Create type</Button>
+          <Button type="submit">Create brand</Button>
         </form>
       </Form>
       <Table className="border mt-4">
@@ -107,11 +106,11 @@ export const TypeForm = observer(() => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {type.map((entry) => {
+          {brands.map((brand) => {
             return (
-              <TableRow key={entry.id}>
-                <TableCell className="font-medium">{entry.id}</TableCell>
-                <TableCell>{entry.name}</TableCell>
+              <TableRow key={brand.id}>
+                <TableCell className="font-medium">{brand.id}</TableCell>
+                <TableCell>{brand.name}</TableCell>
               </TableRow>
             )
           })}
