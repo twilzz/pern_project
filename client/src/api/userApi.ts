@@ -24,7 +24,7 @@ export const login = async (email: string, password: string) => {
 }
 
 export const checkUser = async () => {
-  const response = await authHost.post('api/auth')
+  const response = await authHost.get('api/user/auth')
   localStorage.setItem('token', response.data.token)
   const decoded = jwtDecode<JwtPayload>(response.data.token)
   return decoded as IUser

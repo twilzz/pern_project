@@ -6,15 +6,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useStore } from './StoreContext'
 import { Button } from './ui/button'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from './ui/form'
+import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
 import { Input } from './ui/input'
 import {
   Table,
@@ -81,22 +73,23 @@ export const TypeForm = observer(() => {
   return (
     <div className="w-[400px] rounded-lg border p-4 shadow-lg">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <p className="font-semibold">Add New Device Type</p>
           <FormField
             control={form.control}
             name="typeName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Devices Type</FormLabel>
                 <FormControl>
                   <Input placeholder="Devices Type" {...field} />
                 </FormControl>
-                <FormDescription>Enter Devices Type</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Create type</Button>
+          <div className="flex justify-end">
+            <Button type="submit">Create type</Button>
+          </div>
         </form>
       </Form>
       <Table className="border mt-4">

@@ -6,15 +6,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useStore } from './StoreContext'
 import { Button } from './ui/button'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from './ui/form'
+import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
 import { Input } from './ui/input'
 import {
   Table,
@@ -80,22 +72,23 @@ export const BrandForm = observer(() => {
   return (
     <div className="w-[400px] rounded-lg border p-4 shadow-lg">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <p className="font-semibold">Add New Device Brand</p>
           <FormField
             control={form.control}
             name="brandName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Devices Brand</FormLabel>
                 <FormControl>
                   <Input placeholder="Devices brand" {...field} />
                 </FormControl>
-                <FormDescription>Enter Brand Name</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Create brand</Button>
+          <div className="flex justify-end">
+            <Button type="submit">Create brand</Button>
+          </div>
         </form>
       </Form>
       <Table className="border mt-4">

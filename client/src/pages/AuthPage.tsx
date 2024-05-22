@@ -74,7 +74,7 @@ export const AuthPage = observer(() => {
       const response = await login(email, password)
       setUser(response)
       setIsAuth(true)
-      navigate(ROUTES.SHOP)
+      navigate(-1)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message = error.response?.data.message

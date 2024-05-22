@@ -1,4 +1,5 @@
-import { IDeviceBrand, IDeviceType } from '@/store/DeviceStore'
+import { IDeviceForm } from '@/components/DeviceForm'
+import { IDevice, IDeviceBrand, IDeviceType } from '@/store/DeviceStore'
 import { authHost, host } from './axios'
 
 export const createDeviceType = async (typeName: string) => {
@@ -25,4 +26,18 @@ export const getAllBrands = async () => {
     id,
     name,
   })) as IDeviceBrand[]
+}
+
+export const createDevice = async (device: IDeviceForm) => {
+  const { data } = await authHost.post('api/device', device, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+  return data
+}
+
+export const getAllDevices = async () => {
+  const { data } = await host.get('api/device/allDevices')
+  return data as IDevice[]
 }

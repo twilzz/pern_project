@@ -33,12 +33,10 @@ export default class Device extends Model {
   @Column
   name!: string
 
-  @AllowNull(false)
-  @NotEmpty
   @Column
   price!: number
 
-  @AllowNull(false)
+  @AllowNull(true)
   @NotEmpty
   @Column
   rating!: number
@@ -47,13 +45,11 @@ export default class Device extends Model {
   @Column
   image!: string
 
-  @AllowNull(false)
-  @NotEmpty
+  @AllowNull(true)
   @Column
   type_id!: number
 
-  @AllowNull(false)
-  @NotEmpty
+  @AllowNull(true)
   @Column
   brand_id!: number
 

@@ -22,7 +22,9 @@ export const UserMenu = observer(() => {
   const currentUser = user
 
   const [menuIsOpen, setMenuIsOpen] = useState(false)
+
   const navigate = useNavigate()
+
   return (
     <>
       <DropdownMenu open={menuIsOpen} onOpenChange={() => setMenuIsOpen(false)}>
