@@ -3,7 +3,7 @@ import { IDeviceBrand, IDeviceType } from '@/store/DeviceStore'
 import axios from 'axios'
 import { Image } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { Combobox } from './Combobox'
 import { useStore } from './StoreContext'
 import { Button } from './ui/button'
@@ -14,12 +14,12 @@ import { Toaster } from './ui/toaster'
 
 //todo add zod Schema
 export interface IDeviceForm {
-  name: string
+  model: string
   rating?: number
   price?: number
   brand_id?: IDeviceBrand['id']
   type_id?: IDeviceType['id']
-  info?: string
+  info?: { name: string; value: string }[]
   image?: File
 }
 
@@ -29,18 +29,30 @@ export const DeviceForm = observer(() => {
   } = useStore()
   const form = useForm<IDeviceForm>({
     defaultValues: {
-      name: '',
+      model: '',
       rating: undefined,
       price: undefined,
       brand_id: undefined,
       type_id: undefined,
-      info: undefined,
+      info: [{ name: '', value: '' }],
       image: undefined,
     },
   })
 
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'info',
+  })
+  const onAddOption = () => {
+    if (fields.length <= 3) append({ name: '', value: '' })
+  }
+  const onDeleteOption = (index: number) => remove(index)
+
   function onSubmit(data: IDeviceForm) {
-    createDevice(data).catch((error) => {
+    createDevice({
+      ...data,
+      info: JSON.stringify(data.info),
+    }).catch((error) => {
       if (axios.isAxiosError(error)) {
         const message = error.response?.data.message
         if (typeof message === 'object') console.log(message)
@@ -105,7 +117,7 @@ export const DeviceForm = observer(() => {
           <div className="grid grid-cols-3 gap-1">
             <FormField
               control={form.control}
-              name="name"
+              name="model"
               rules={{
                 required: { value: true, message: 'Field is required' },
               }}
@@ -132,37 +144,108 @@ export const DeviceForm = observer(() => {
               )}
             />
           </div>
-          <div className="flex justify-between">
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field: { value, onChange, ...field } }) => {
-                if (value) {
-                  return (
-                    <div className="flex items-center gap-2 ">
-                      <Image /> {value.name}
-                    </div>
-                  )
-                } else {
-                  return (
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field: { value, onChange, ...field } }) => {
+              if (value) {
+                return (
+                  <div className="flex items-center gap-2 ">
+                    <Image /> {value.name}
+                  </div>
+                )
+              } else {
+                return (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Price"
+                        type="file"
+                        onChange={(event) => {
+                          if (event.target.files)
+                            onChange(event.target.files[0])
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }
+            }}
+          />
+
+          {fields.map((field, index) => {
+            return (
+              <div key={index} className="flex gap-1 items-center">
+                <FormField
+                  control={form.control}
+                  name={`info.${index}.name`}
+                  render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Price"
-                          type="file"
-                          onChange={(event) => {
-                            if (event.target.files)
-                              onChange(event.target.files[0])
-                          }}
-                        />
+                        <Input placeholder="Option Name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
-                  )
-                }
-              }}
-            />
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`info.${index}.value`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input placeholder="Option value" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {index === 0 && (
+                  <Button
+                    variant={'outline'}
+                    type="button"
+                    onClick={onAddOption}
+                    className="size-[40px]"
+                  >
+                    +
+                  </Button>
+                )}
+                {index > 0 && index < 3 && (
+                  <div className="flex flex-col">
+                    <Button
+                      variant={'outline'}
+                      type="button"
+                      onClick={onAddOption}
+                      className="h-[20px] w-[40px]"
+                    >
+                      +
+                    </Button>
+                    <Button
+                      variant={'outline'}
+                      type="button"
+                      onClick={() => onDeleteOption(index)}
+                      className="h-[20px] w-[40px]"
+                    >
+                      -
+                    </Button>
+                  </div>
+                )}
+                {index === 3 && (
+                  <Button
+                    variant={'outline'}
+                    type="button"
+                    onClick={() => onDeleteOption(index)}
+                    className="size-[40px]"
+                  >
+                    -
+                  </Button>
+                )}
+              </div>
+            )
+          })}
+          <div>
             <Button type="submit" className="justify-self-end">
               Create Device
             </Button>
@@ -176,7 +259,16 @@ export const DeviceForm = observer(() => {
             <TableHead>Name</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody></TableBody>
+        <TableBody>
+          {deviceStore.devices.map(({ id, model }) => {
+            return (
+              <TableRow>
+                <TableHead className="w-[100px]">{id}</TableHead>
+                <TableHead>{model}</TableHead>
+              </TableRow>
+            )
+          })}
+        </TableBody>
       </Table>
       <Toaster />
     </div>

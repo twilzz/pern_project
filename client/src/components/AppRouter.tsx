@@ -1,14 +1,11 @@
+import { observer } from 'mobx-react-lite'
 import { Route, Routes } from 'react-router-dom'
 import { authRoutes, publicRoutes, userRoutes } from '../utils/routes'
 import { useStore } from './StoreContext'
-import { observer } from 'mobx-react-lite'
 
 export const AppRouter = observer(() => {
   const { store } = useStore()
   const userData = store?.userStore
-
-  console.log('ROTER', userData.isAuth);
-  
 
   return (
     <Routes>

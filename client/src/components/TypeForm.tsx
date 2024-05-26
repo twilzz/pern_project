@@ -1,7 +1,6 @@
 import { createDeviceType, getAllTypes } from '@/api/deviceApi'
 import axios from 'axios'
 import { observer } from 'mobx-react-lite'
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useStore } from './StoreContext'
@@ -39,13 +38,9 @@ export const TypeForm = observer(() => {
 
   const {
     store: {
-      deviceStore: { setType, type },
+      deviceStore: { setTypes, type },
     },
   } = useStore()
-
-  useEffect(() => {
-    getAllTypes().then((data) => setType(data))
-  }, [])
 
   function onSubmit(data: z.infer<typeof deviceTypeSchema>) {
     createDeviceType(data.typeName)
@@ -54,7 +49,7 @@ export const TypeForm = observer(() => {
           title: 'Successfully created',
           description: `${data.name} was created`,
         })
-        getAllTypes().then((updatedData) => setType(updatedData))
+        getAllTypes().then((updatedData) => setTypes(updatedData))
         form.reset()
       })
       .catch((error) => {

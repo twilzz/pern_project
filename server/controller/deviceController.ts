@@ -9,30 +9,41 @@ import { ApiError } from '../utils/ApiError'
 class DeviceController {
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, price, brand_id, type_id, info, rating } = req.body
-
-      if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).send('No files were uploaded.')
+      let { model, price, brand_id, type_id, info, rating } = req.body
+      let deviceData: { [key: string]: any } = {
+        model,
+        price,
+        brand_id,
+        type_id,
+        rating,
       }
-      const { image } = req.files
-      const logo: UploadedFile | UploadedFile[] = image
 
-      if (!Array.isArray(logo)) {
+      let files = req.files
+      if (files?.image) {
+        const logo: UploadedFile | UploadedFile[] = files.image
         const fileName = uuidv4() + '.jpg'
-        logo.name = fileName
-        logo.mv(path.resolve(__dirname, '..', 'static', fileName))
-
-        const device = await Device.create({
-          name,
-          rating,
-          price,
-          brand_id,
-          type_id,
-          info,
-          image: fileName,
-        })
-        return res.json(device)
+        if (!Array.isArray(logo)) {
+          logo.name = fileName
+          logo.mv(path.resolve(__dirname, '..', 'static', fileName))
+          deviceData.image = [fileName]
+        }
       }
+
+      const device = await Device.create({ deviceData })
+
+      if (info) {
+        const data2Create: { name: string; value: string }[] = JSON.parse(info)
+        data2Create.forEach((entry) => {
+          if (entry.name && entry.value)
+            Device_info.create({
+              title: entry.name,
+              description: entry.value,
+              device_id: device.id,
+            })
+        })
+      }
+
+      return res.json(device)
     } catch (error) {
       next(ApiError.badRequest(error as string))
     }

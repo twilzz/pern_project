@@ -1,7 +1,6 @@
 import { createBrand, getAllBrands } from '@/api/deviceApi'
 import axios from 'axios'
 import { observer } from 'mobx-react-lite'
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useStore } from './StoreContext'
@@ -41,10 +40,6 @@ export const BrandForm = observer(() => {
       deviceStore: { setBrands, brands },
     },
   } = useStore()
-
-  useEffect(() => {
-    getAllBrands().then((data) => setBrands(data))
-  }, [])
 
   function onSubmit(data: z.infer<typeof deviceBrandSchema>) {
     createBrand(data.brandName)

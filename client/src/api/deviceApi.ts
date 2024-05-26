@@ -28,7 +28,9 @@ export const getAllBrands = async () => {
   })) as IDeviceBrand[]
 }
 
-export const createDevice = async (device: IDeviceForm) => {
+export const createDevice = async (
+  device: Omit<IDeviceForm, 'info'> & { info: string }
+) => {
   const { data } = await authHost.post('api/device', device, {
     headers: {
       'Content-Type': 'multipart/form-data',

@@ -3,6 +3,7 @@ import {
   AutoIncrement,
   BelongsTo,
   Column,
+  DataType,
   ForeignKey,
   HasMany,
   Model,
@@ -31,7 +32,7 @@ export default class Device extends Model {
   @AllowNull(false)
   @NotEmpty
   @Column
-  name!: string
+  model!: string
 
   @Column
   price!: number
@@ -42,8 +43,8 @@ export default class Device extends Model {
   rating!: number
 
   @AllowNull(true)
-  @Column
-  image!: string
+  @Column({ type: DataType.ARRAY(DataType.STRING) })
+  image!: string[]
 
   @AllowNull(true)
   @Column

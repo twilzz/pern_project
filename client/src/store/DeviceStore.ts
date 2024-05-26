@@ -59,7 +59,7 @@ export default class DeviceStore implements IDeviceStore {
     return this._selectedBrands
   }
 
-  public setType = (type: IDeviceType[]): void => {
+  public setTypes = (type: IDeviceType[]): void => {
     this._type = type
   }
   public setBrands = (brands: IDeviceBrand[]) => {
