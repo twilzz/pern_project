@@ -1,4 +1,4 @@
-import { createDevice } from '@/api/deviceApi'
+import { createDevice, getAllDevices } from '@/api/deviceApi'
 import { IDeviceBrand, IDeviceType } from '@/store/DeviceStore'
 import axios from 'axios'
 import { Image } from 'lucide-react'
@@ -9,8 +9,9 @@ import { useStore } from './StoreContext'
 import { Button } from './ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
 import { Input } from './ui/input'
-import { Table, TableBody, TableHead, TableHeader, TableRow } from './ui/table'
+import { Table, TableBody, TableCell, TableHeader, TableRow } from './ui/table'
 import { Toaster } from './ui/toaster'
+import { toast } from './ui/use-toast'
 
 //todo add zod Schema
 export interface IDeviceForm {
@@ -52,19 +53,29 @@ export const DeviceForm = observer(() => {
     createDevice({
       ...data,
       info: JSON.stringify(data.info),
-    }).catch((error) => {
-      if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message
-        if (typeof message === 'object') console.log(message)
-
-        //   toast({
-        //     variant: 'destructive',
-        //     title: 'Something went wrong',
-        //     description: message,
-        //   })
-      }
-      console.error(error)
     })
+      .then((data) => {
+        toast({
+          title: 'Successfully created',
+          description: `${data.model} was created`,
+        })
+        getAllDevices().then((updatedData) =>
+          deviceStore.setDevices(updatedData)
+        )
+        form.reset()
+      })
+      .catch((error) => {
+        if (axios.isAxiosError(error)) {
+          const message = error.response?.data.message
+          if (typeof message === 'object') console.log(message)
+          toast({
+            variant: 'destructive',
+            title: 'Something went wrong',
+            description: message,
+          })
+        }
+        console.error(error)
+      })
   }
 
   return (
@@ -82,7 +93,7 @@ export const DeviceForm = observer(() => {
                     <Combobox
                       placeholder="Select type"
                       onSelect={onChange}
-                      options={deviceStore?.type?.map(({ id, name }) => ({
+                      options={deviceStore?.types?.map(({ id, name }) => ({
                         id,
                         name,
                       }))}
@@ -252,19 +263,27 @@ export const DeviceForm = observer(() => {
           </div>
         </form>
       </Form>
-      <Table className="border mt-4">
+      <Table className="border mt-4 table-fixed">
         <TableHeader className="bg-slate-200">
           <TableRow>
-            <TableHead className="w-[100px]">Id</TableHead>
-            <TableHead>Name</TableHead>
+            <TableCell className="w-[50px]">Id</TableCell>
+            <TableCell className="w-fit">Type</TableCell>
+            <TableCell>Model</TableCell>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {deviceStore.devices.map(({ id, model }) => {
+          {deviceStore.devices.map(({ id, model, type_id }) => {
             return (
               <TableRow>
-                <TableHead className="w-[100px]">{id}</TableHead>
-                <TableHead>{model}</TableHead>
+                <TableCell>{id}</TableCell>
+                <TableCell>
+                  {
+                    deviceStore.types.find(
+                      (typeInStore) => typeInStore.id === type_id
+                    )?.name
+                  }
+                </TableCell>
+                <TableCell>{model}</TableCell>
               </TableRow>
             )
           })}

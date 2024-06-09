@@ -36,7 +36,7 @@ export const createDevice = async (
       'Content-Type': 'multipart/form-data',
     },
   })
-  return data
+  return data as IDevice
 }
 
 export const getAllDevices = async () => {

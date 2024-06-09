@@ -37,12 +37,12 @@ export const ShopPage = observer(() => {
                 <div className="grid grid-cols-3 gap-4 mb-4 justify-between">
                   {deviceStore.devices
                     .slice(page * pageSize, page * pageSize + pageSize)
-                    .map(({ id, model, description, rating, price, brand }) => (
+                    .map(({ id, model, description, rating, price, image }) => (
                       <ShopCard
                         key={id}
                         id={id}
                         title={model}
-                        description={brand}
+                        image={image[0]}
                         content={description}
                         footer={rating}
                         price={price}

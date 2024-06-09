@@ -6,7 +6,7 @@ import { Command, CommandGroup, CommandItem, CommandList } from './ui/command'
 export const MenuBar = observer(() => {
   const {
     store: {
-      deviceStore: { type: categories, selectedType, setSelectedType },
+      deviceStore: { types: categories, selectedType, setSelectedType },
     },
   } = useStore()
 
@@ -16,24 +16,23 @@ export const MenuBar = observer(() => {
     <Command className="max-w-[200px] rounded-lg border shadow-md">
       <CommandList>
         <CommandGroup heading="Categories">
-          {categories.map(({ id, name }) => {
+          {categories.map((category) => {
             return (
               <CommandItem
-                key={id}
+                key={category.id}
                 className={cn(
                   'hover:bg-slate-600',
-                  id === selectedType && 'bg-slate-600'
+                  category.id === selectedType?.id && 'bg-slate-600'
                 )}
                 onSelect={() => {
-                  console.log(id)
-                  if (selectedType === id) {
+                  if (selectedType?.id === category.id) {
                     setSelectedType(null)
                   } else {
-                    setSelectedType(id)
+                    setSelectedType(category)
                   }
                 }}
               >
-                <span>{name}</span>
+                <span>{category.name}</span>
               </CommandItem>
             )
           })}

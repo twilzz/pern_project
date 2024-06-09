@@ -12,23 +12,25 @@ export interface IDeviceBrand {
 
 export interface IDevice {
   id: number
-  brand: string
   model: string
+  image: string[]
+  brand_id: number
+  type_id: number
   description: string
   price: number
   rating: number
 }
 
 export interface IDeviceStore {
-  type: IDeviceType[]
+  types: IDeviceType[]
   brands: IDeviceBrand[]
   devices: IDevice[]
-  selectedType: IDeviceType[] | null
+  selectedType: IDeviceType | null
   selectedBrands: IDeviceBrand[] | null
 }
 
 export default class DeviceStore implements IDeviceStore {
-  private _type: IDeviceType[] = []
+  private _types: IDeviceType[] = []
   private _brands: IDeviceBrand[] = []
   private _devices: IDevice[] = []
   private _selectedType: IDeviceStore['selectedType'] = null
@@ -39,8 +41,8 @@ export default class DeviceStore implements IDeviceStore {
     makeAutoObservable(this)
   }
 
-  public get type() {
-    return this._type
+  public get types() {
+    return this._types
   }
 
   public get brands() {
@@ -60,7 +62,7 @@ export default class DeviceStore implements IDeviceStore {
   }
 
   public setTypes = (type: IDeviceType[]): void => {
-    this._type = type
+    this._types = type
   }
   public setBrands = (brands: IDeviceBrand[]) => {
     this._brands = brands
@@ -68,7 +70,7 @@ export default class DeviceStore implements IDeviceStore {
   public setDevices = (devices: IDevice[]) => {
     this._devices = devices
   }
-  public setSelectedType = (type: IDeviceType[] | null) => {
+  public setSelectedType = (type: IDeviceType | null) => {
     this._selectedType = type
   }
 

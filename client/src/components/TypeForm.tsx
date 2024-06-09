@@ -38,7 +38,7 @@ export const TypeForm = observer(() => {
 
   const {
     store: {
-      deviceStore: { setTypes, type },
+      deviceStore: { setTypes, types },
     },
   } = useStore()
 
@@ -95,7 +95,7 @@ export const TypeForm = observer(() => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {type.map((entry) => {
+          {types.map((entry) => {
             return (
               <TableRow key={entry.id}>
                 <TableCell className="font-medium">{entry.id}</TableCell>

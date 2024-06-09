@@ -10,6 +10,8 @@ class DeviceController {
   async create(req: Request, res: Response, next: NextFunction) {
     try {
       let { model, price, brand_id, type_id, info, rating } = req.body
+      console.log(model, price, brand_id, type_id, info, rating)
+
       let deviceData: { [key: string]: any } = {
         model,
         price,
@@ -29,7 +31,8 @@ class DeviceController {
         }
       }
 
-      const device = await Device.create({ deviceData })
+      const device = await Device.create(deviceData)
+      console.log(device)
 
       if (info) {
         const data2Create: { name: string; value: string }[] = JSON.parse(info)

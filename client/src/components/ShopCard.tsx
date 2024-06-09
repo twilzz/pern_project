@@ -14,7 +14,7 @@ import {
 interface ShopCardProps {
   id: number
   title: string
-  description: string
+  image?: string
   content: string
   footer: ReactNode | string
   price: number
@@ -23,7 +23,7 @@ interface ShopCardProps {
 export const ShopCard = ({
   id,
   title,
-  description,
+  image,
   content,
   price,
 }: ShopCardProps) => {
@@ -35,7 +35,9 @@ export const ShopCard = ({
           {title}
           <div>id:{id}</div>
         </CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription>
+          <img src={import.meta.env.VITE_API_URL + '/' + image} alt={title} />
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <p>{content}</p>
