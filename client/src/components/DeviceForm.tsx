@@ -1,7 +1,7 @@
 import { createDevice, getAllDevices } from '@/api/deviceApi'
 import { IDeviceBrand, IDeviceType } from '@/store/DeviceStore'
 import axios from 'axios'
-import { Image } from 'lucide-react'
+import { Image, Pencil } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { Combobox } from './Combobox'
@@ -269,6 +269,7 @@ export const DeviceForm = observer(() => {
             <TableCell className="w-[50px]">Id</TableCell>
             <TableCell className="w-fit">Type</TableCell>
             <TableCell>Model</TableCell>
+            <TableCell className="w-8 p-0" />
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -284,6 +285,15 @@ export const DeviceForm = observer(() => {
                   }
                 </TableCell>
                 <TableCell>{model}</TableCell>
+                <TableCell className="w-8 pl-0">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="size-6 p-1 hover:bg-slate-300"
+                  >
+                    <Pencil />
+                  </Button>
+                </TableCell>
               </TableRow>
             )
           })}
