@@ -5,6 +5,7 @@ import { Image, Pencil } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { Combobox } from './Combobox'
+import { DeviceEditForm } from './DeviceEditForm'
 import { useStore } from './StoreContext'
 import { Button } from './ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
@@ -21,7 +22,7 @@ export interface IDeviceForm {
   brand_id?: IDeviceBrand['id']
   type_id?: IDeviceType['id']
   info?: { name: string; value: string }[]
-  image?: File
+  image?: File | File[]
 }
 
 export const DeviceForm = observer(() => {
@@ -159,7 +160,7 @@ export const DeviceForm = observer(() => {
             control={form.control}
             name="image"
             render={({ field: { value, onChange, ...field } }) => {
-              if (value) {
+              if (value && !Array.isArray(value)) {
                 return (
                   <div className="flex items-center gap-2 ">
                     <Image /> {value.name}
@@ -286,13 +287,19 @@ export const DeviceForm = observer(() => {
                 </TableCell>
                 <TableCell>{model}</TableCell>
                 <TableCell className="w-8 pl-0">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="size-6 p-1 hover:bg-slate-300"
-                  >
-                    <Pencil />
-                  </Button>
+                  <DeviceEditForm
+                    deviceId={id}
+                    render={(props) => (
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="size-6 p-1 hover:bg-slate-300"
+                        onClick={props.onClick}
+                      >
+                        <Pencil />
+                      </Button>
+                    )}
+                  />
                 </TableCell>
               </TableRow>
             )
