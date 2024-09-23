@@ -43,3 +43,8 @@ export const getAllDevices = async () => {
   const { data } = await host.get('api/device/allDevices')
   return data as IDevice[]
 }
+
+export const getDeviceById = async (deviceId: number) => {
+  const { data } = await host.get(`api/device/${deviceId}`)
+  return data as IDevice
+}

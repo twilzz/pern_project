@@ -94,9 +94,21 @@ class DeviceController {
     const { id } = req.params
     const device = await Device.findOne({
       where: { id },
-      include: [{ model: Device_info, as: 'info' }],
-    })
-    res.json(device)
+      attributes: [
+        'id',
+        'model',
+        'price',
+        'rating',
+        'image',
+        'type_id',
+        'brand_id',
+      ],
+    }).then((data) => data?.dataValues)
+    const deviceInfo = await Device_info.findAll({
+      where: { device_id: id },
+      attributes: ['device_id', 'title', 'description'],
+    }).then((data) => data.map((d) => d.dataValues))
+    res.json({ ...device, info: deviceInfo })
   }
 }
 
