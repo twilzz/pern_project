@@ -27,14 +27,14 @@ export const ShopPage = observer(() => {
   return (
     <div className="flex flex-col items-center">
       <h1>Shop Page!</h1>
-      <div className="w-8/12">
+      <div className="w-full flex flex-col justify-center items-center">
         {deviceStore.devices.length > 0 ? (
           <>
             <BrandFilterBar />
-            <div className="flex gap-3">
+            <div className="flex gap-3 w-8/12">
               <MenuBar />
               <div>
-                <div className="grid grid-cols-3 gap-4 mb-4 justify-between">
+                <div className="grid grid-cols-3 gap-4 mb-2">
                   {deviceStore.devices
                     .slice(page * pageSize, page * pageSize + pageSize)
                     .map(({ id, model, description, rating, price, image }) => (

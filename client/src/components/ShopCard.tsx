@@ -29,14 +29,18 @@ export const ShopCard = ({
 }: ShopCardProps) => {
   const navigate = useNavigate()
   return (
-    <Card className="w-[300px] min-h-[400px] flex flex-col justify-between hover:shadow-lg">
+    <Card className="min-h-[400px] flex flex-col justify-between hover:shadow-lg">
       <CardHeader>
         <CardTitle className="flex justify-between">
           {title}
           <div>id:{id}</div>
         </CardTitle>
         <CardDescription>
-          <img src={import.meta.env.VITE_API_URL + '/' + image} alt={title} />
+          <img
+            className="w-1/2"
+            src={import.meta.env.VITE_API_URL + '/' + image}
+            alt={title}
+          />
         </CardDescription>
       </CardHeader>
       <CardContent>

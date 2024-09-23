@@ -10,7 +10,7 @@ export const BrandFilterBar = observer(() => {
   } = useStore()
 
   return (
-    <div className="my-2 ml-[210px]">
+    <div className="flex gap-2 w-full justify-center my-4">
       {brands.map(({ id, name }) => {
         return (
           <Badge
