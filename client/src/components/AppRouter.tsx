@@ -1,3 +1,4 @@
+import { PageNotFound } from '@/pages/PageNotFound'
 import { observer } from 'mobx-react-lite'
 import { Route, Routes } from 'react-router-dom'
 import { authRoutes, publicRoutes, userRoutes } from '../utils/routes'
@@ -9,6 +10,7 @@ export const AppRouter = observer(() => {
 
   return (
     <Routes>
+      <Route path="*" element={<PageNotFound />} />
       {userData?.isAuth &&
         authRoutes.map(({ path, Component }) => (
           <Route element={<Component />} path={path} key={path} />
