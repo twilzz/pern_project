@@ -1,6 +1,8 @@
+import { editDevice, getDeviceById } from '@/api/deviceApi'
+import { IDevice } from '@/store/DeviceStore'
 import { CirclePlus } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Combobox } from './Combobox'
 import { IDeviceForm } from './DeviceForm'
@@ -23,6 +25,11 @@ import {
 } from './ui/form'
 import { Input } from './ui/input'
 
+type EditDeviceForm = Omit<IDeviceForm, 'image'> & {
+  image: string[]
+  imagesForUpload: File[]
+}
+
 interface DeviceEditFormProps {
   deviceId: number
   render: (props: { onClick: () => void }) => ReactNode
@@ -34,27 +41,46 @@ export const DeviceEditForm = observer(
       store: { deviceStore },
     } = useStore()
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [device, setDevice] = useState<IDevice | null>(null)
 
-    const device = deviceStore.devices.find((device) => device.id === deviceId)
-
-    const form = useForm<Omit<IDeviceForm, 'image'> & { image: FileList }>({
-      defaultValues: { ...device, image: undefined },
+    const form = useForm<EditDeviceForm>({
+      defaultValues: { ...device, imagesForUpload: [] },
     })
 
-    const onSubmit = (data: unknown) => console.log(data)
+    const fetchDevice = async () => {
+      setLoading(true)
+      await getDeviceById(deviceId)
+        .then((data) => {
+          console.log(data)
+          setDevice(data)
+        })
+        .then(() => setLoading(false))
+    }
 
-    const { watch } = form
+    useEffect(() => {
+      if (device) {
+        form.reset({ ...device })
+      }
+    }, [device, form])
+
+    function onSubmit(data: EditDeviceForm) {
+      editDevice(data, deviceId).then(() => setDialogOpen(false))
+    }
 
     return (
       <>
         {render({
           onClick: () => {
             setDialogOpen(true)
+            fetchDevice()
           },
         })}
         <Dialog open={dialogOpen} onOpenChange={() => setDialogOpen(false)}>
-          <DialogContent>
-            <div className="w-[500px] min-h-[250px] flex flex-col justify-start items-center">
+          <DialogContent className="w-[500px] min-h-[250px] flex flex-col justify-start items-center">
+            {loading ? (
+              'LOADER'
+            ) : (
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
@@ -116,7 +142,10 @@ export const DeviceEditForm = observer(
                       control={form.control}
                       name="model"
                       rules={{
-                        required: { value: true, message: 'Field is required' },
+                        required: {
+                          value: true,
+                          message: 'Field is required',
+                        },
                       }}
                       render={({ field }) => (
                         <FormItem className="col-span-2">
@@ -149,75 +178,150 @@ export const DeviceEditForm = observer(
                       )}
                     />
                   </div>
-                  <FormField
-                    control={form.control}
-                    name="image"
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    render={({ field: { value, onChange, ...field } }) => {
-                      const files = watch('image')
-                      return (
-                        <div className="flex gap-2">
-                          {device?.image.length && (
-                            <img
-                              className="size-[60px] border"
-                              src={
-                                import.meta.env.VITE_API_URL +
-                                '/' +
-                                device?.image[0]
-                              }
-                              alt="pic"
-                            />
-                          )}
-                          {files &&
-                            Array.from(files).map((file) => {
-                              return (
-                                <div className="border" key={file.name}>
-                                  <img
-                                    className="size-[60px] hover:brightness-50"
-                                    src={URL.createObjectURL(file)}
-                                    alt={file.name}
-                                  />
-                                </div>
-                              )
-                            })}
-                          <FormItem className="hidden">
-                            <FormControl>
-                              <Input
-                                {...field}
-                                placeholder="file"
-                                multiple
-                                id="file"
-                                type="file"
-                                onChange={(event) => {
-                                  if (event.target.files)
-                                    onChange(event.target.files)
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                          <Button
-                            variant={'outline'}
-                            className="size-[60px]"
-                            onClick={() =>
-                              document.getElementById('file')?.click()
-                            }
-                          >
-                            <CirclePlus className="text-muted-foreground/50" />
-                          </Button>
-                        </div>
-                      )
-                    }}
-                  />
+                  <div className="flex gap-2">
+                    <FormField
+                      control={form.control}
+                      name="image"
+                      render={({ field }) => {
+                        return (
+                          <div className="flex gap-2">
+                            {field.value?.map((src) => (
+                              <div className="relative">
+                                <img
+                                  className="size-[60px] border"
+                                  src={import.meta.env.VITE_API_URL + '/' + src}
+                                  alt="pic"
+                                />
+                                <Button
+                                  variant="outline"
+                                  size="icon"
+                                  className="size-5 rounded-full absolute top-0 right-0"
+                                  onClick={() => {
+                                    field.onChange(
+                                      field.value.filter(
+                                        (element) => element !== src
+                                      )
+                                    )
+                                  }}
+                                >
+                                  X
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        )
+                      }}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="imagesForUpload"
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      render={({ field: { value, onChange, ...field } }) => {
+                        return (
+                          <div className="flex gap-2">
+                            {value &&
+                              Array.from(value).map((file) => {
+                                return (
+                                  <div
+                                    className="border relative"
+                                    key={file.name}
+                                  >
+                                    <img
+                                      className="size-[60px] hover:brightness-50"
+                                      src={URL.createObjectURL(file)}
+                                      alt={file.name}
+                                    />
+                                    <Button
+                                      variant="outline"
+                                      size="icon"
+                                      className="size-5 rounded-full absolute top-0 right-0"
+                                      onClick={() => {
+                                        const list = Array.from(value)
+                                        onChange(
+                                          list.filter(
+                                            (e) => e.name !== file.name
+                                          )
+                                        )
+                                      }}
+                                    >
+                                      X
+                                    </Button>
+                                  </div>
+                                )
+                              })}
+                            <FormItem className="hidden">
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  placeholder="file"
+                                  multiple
+                                  id="file"
+                                  type="file"
+                                  onChange={(event) => {
+                                    const fileList = Array.from(value)
+                                    const files = event.target.files
+                                    if (files) {
+                                      if (
+                                        files.length === 1 &&
+                                        !fileList.find(
+                                          (file) =>
+                                            file.name === files?.[0].name
+                                        )
+                                      ) {
+                                        //добавление файла по одному
+                                        onChange(fileList.concat(files[0]))
+                                      } else {
+                                        //добавление файлов пачкой
+
+                                        //убираем повторяшки из выбранных файлов
+                                        const filteredFiles = Array.from(
+                                          files
+                                        ).filter(
+                                          (file) =>
+                                            !fileList.find(
+                                              (f) => f.name === file.name
+                                            )
+                                        )
+
+                                        onChange(fileList.concat(filteredFiles))
+                                      }
+                                    }
+                                  }}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                            {form.getValues('image')?.length + value.length <=
+                              5 && (
+                              <Button
+                                variant={'outline'}
+                                className="size-[60px]"
+                                onClick={() =>
+                                  document.getElementById('file')?.click()
+                                }
+                                type="button"
+                              >
+                                <CirclePlus className="text-muted-foreground/50" />
+                              </Button>
+                            )}
+                          </div>
+                        )
+                      }}
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      variant={'outline'}
+                      onClick={() => setDialogOpen(false)}
+                      type="button"
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit">Save</Button>
+                  </DialogFooter>
                 </form>
               </Form>
-            </div>
-            <DialogFooter>
-              <Button variant={'outline'} onClick={() => setDialogOpen(false)}>
-                Cancel
-              </Button>
-              <Button type="submit">Save</Button>
-            </DialogFooter>
+            )}
           </DialogContent>
         </Dialog>
       </>

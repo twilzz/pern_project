@@ -21,7 +21,7 @@ export interface IDeviceForm {
   price?: number
   brand_id?: IDeviceBrand['id']
   type_id?: IDeviceType['id']
-  info?: { name: string; value: string }[]
+  info?: { title: string; description: string }[]
   image?: File | File[]
 }
 
@@ -36,7 +36,7 @@ export const DeviceForm = observer(() => {
       price: undefined,
       brand_id: undefined,
       type_id: undefined,
-      info: [{ name: '', value: '' }],
+      info: [{ title: '', description: '' }],
       image: undefined,
     },
   })
@@ -46,7 +46,7 @@ export const DeviceForm = observer(() => {
     name: 'info',
   })
   const onAddOption = () => {
-    if (fields.length <= 3) append({ name: '', value: '' })
+    if (fields.length <= 3) append({ title: '', description: '' })
   }
   const onDeleteOption = (index: number) => remove(index)
 
@@ -192,11 +192,11 @@ export const DeviceForm = observer(() => {
               <div key={index} className="flex gap-1 items-center">
                 <FormField
                   control={form.control}
-                  name={`info.${index}.name`}
+                  name={`info.${index}.title`}
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input placeholder="Option Name" {...field} />
+                        <Input placeholder="Option Title" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -204,11 +204,11 @@ export const DeviceForm = observer(() => {
                 />
                 <FormField
                   control={form.control}
-                  name={`info.${index}.value`}
+                  name={`info.${index}.description`}
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input placeholder="Option value" {...field} />
+                        <Input placeholder="Option Description" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

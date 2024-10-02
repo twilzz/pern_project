@@ -39,6 +39,19 @@ export const createDevice = async (
   return data as IDevice
 }
 
+export const editDevice = async (
+  deviceData: Omit<IDeviceForm, 'image'> & {
+    image: string[]
+    imagesForUpload: File[]
+  },
+  deviceId: number
+) => {
+  const { data } = await host.put(`api/device/${deviceId}`, deviceData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return data
+}
+
 export const getAllDevices = async () => {
   const { data } = await host.get('api/device/allDevices')
   return data as IDevice[]

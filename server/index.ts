@@ -15,6 +15,7 @@ const server = express()
 
 server.use(cors())
 server.use(express.json())
+server.use(express.urlencoded({ extended: true }))
 server.use(express.static(path.resolve(__dirname, 'static')))
 server.use(fileUpload({}))
 server.use('/api', router)
