@@ -20,6 +20,13 @@ class BrandController {
     const brands = await Brand.findAll()
     return res.json(brands)
   }
+
+  async delete(req: Request, res: Response) {
+    const { id } = req.params
+    console.log('Brand name with ID:', id)
+    const response = await Brand.destroy({ where: { id } })
+    if (response) return res.json('Successfully deleted.')
+  }
 }
 
 export const controller = new BrandController()

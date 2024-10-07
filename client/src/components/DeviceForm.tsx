@@ -5,6 +5,7 @@ import { Image, Pencil } from 'lucide-react'
 import { observer } from 'mobx-react-lite'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { Combobox } from './Combobox'
+import { DeleteEntry } from './DeleteEntry'
 import { DeviceEditForm } from './DeviceEditForm'
 import { useStore } from './StoreContext'
 import { Button } from './ui/button'
@@ -264,7 +265,7 @@ export const DeviceForm = observer(() => {
           </div>
         </form>
       </Form>
-      <Table className="border mt-4 table-fixed">
+      <Table className="border mt-4 ">
         <TableHeader className="bg-slate-200">
           <TableRow>
             <TableCell className="w-[50px]">Id</TableCell>
@@ -286,7 +287,7 @@ export const DeviceForm = observer(() => {
                   }
                 </TableCell>
                 <TableCell>{model}</TableCell>
-                <TableCell className="w-8 pl-0">
+                <TableCell className="w-fit pl-0 flex gap-1 pr-0.5">
                   <DeviceEditForm
                     deviceId={id}
                     render={(props) => (
@@ -300,6 +301,7 @@ export const DeviceForm = observer(() => {
                       </Button>
                     )}
                   />
+                  <DeleteEntry entryId={id} entryType="device" />
                 </TableCell>
               </TableRow>
             )

@@ -61,3 +61,18 @@ export const getDeviceById = async (deviceId: number) => {
   const { data } = await host.get(`api/device/${deviceId}`)
   return data as IDevice
 }
+
+export const deleteDeviceTypeById = async (deviceTypeId: number) => {
+  const { data } = await authHost.delete(`api/type/${deviceTypeId}`)
+  return data
+}
+
+export const deleteBrandById = async (brandId: number) => {
+  const { data } = await authHost.delete(`api/brand/${brandId}`)
+  return data
+}
+
+export const deleteDeviceById = async (deviceId: number) => {
+  const { data } = await authHost.delete(`api/device/${deviceId}`)
+  return data
+}

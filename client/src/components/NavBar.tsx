@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils'
 import { authRoutes, publicRoutes } from '@/utils/routes'
 import { observer } from 'mobx-react-lite'
 import { Link, useLocation } from 'react-router-dom'
+import { Basket } from './Basket'
 import { useStore } from './StoreContext'
 import { UserMenu } from './UserMenu'
 import {
@@ -48,7 +49,7 @@ export const NavBar = observer(() => {
         </NavigationMenuList>
       </NavigationMenu>
       <div className="flex items-center gap-2">
-        {!isAuth && <span>Please login or register</span>}
+        {!isAuth ? <span>Please login or register</span> : <Basket />}
         <UserMenu />
       </div>
     </nav>

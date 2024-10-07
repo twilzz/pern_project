@@ -3,6 +3,7 @@ import axios from 'axios'
 import { observer } from 'mobx-react-lite'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { DeleteEntry } from './DeleteEntry'
 import { useStore } from './StoreContext'
 import { Button } from './ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
@@ -92,6 +93,7 @@ export const TypeForm = observer(() => {
           <TableRow>
             <TableHead className="w-[100px]">Id</TableHead>
             <TableHead>Name</TableHead>
+            <TableHead className="w-8" />
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -100,6 +102,9 @@ export const TypeForm = observer(() => {
               <TableRow key={entry.id}>
                 <TableCell className="font-medium">{entry.id}</TableCell>
                 <TableCell>{entry.name}</TableCell>
+                <TableCell className="w-8 px-0.5">
+                  <DeleteEntry entryId={entry.id} entryType="deviceType" />
+                </TableCell>
               </TableRow>
             )
           })}

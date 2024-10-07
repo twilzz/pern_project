@@ -149,6 +149,13 @@ class DeviceController {
     )
     res.json(updatedDev)
   }
+
+  async deleteDeviceById(req: Request, res: Response) {
+    const { id } = req.params
+    console.log('Device with ID:', id)
+    const response = await Device.destroy({ where: { id } })
+    if (response) return res.json('Successfully deleted.')
+  }
 }
 
 export const controller = new DeviceController()

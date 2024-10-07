@@ -20,6 +20,13 @@ class TypeController {
     const types = await Type.findAll()
     return res.json(types)
   }
+
+  async delete(req: Request, res: Response) {
+    const { id } = req.params
+    console.log('Device type with ID:', id)
+    const response = await Type.destroy({ where: { id } })
+    if (response) return res.json('Successfully deleted.')
+  }
 }
 
 export const controller = new TypeController()
