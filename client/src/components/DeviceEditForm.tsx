@@ -24,6 +24,8 @@ import {
   FormMessage,
 } from './ui/form'
 import { Input } from './ui/input'
+import { Toaster } from './ui/toaster'
+import { toast } from './ui/use-toast'
 
 type EditDeviceForm = Omit<IDeviceForm, 'image'> & {
   image: string[]
@@ -52,7 +54,6 @@ export const DeviceEditForm = observer(
       setLoading(true)
       await getDeviceById(deviceId)
         .then((data) => {
-          console.log(data)
           setDevice(data)
         })
         .then(() => setLoading(false))
@@ -65,7 +66,13 @@ export const DeviceEditForm = observer(
     }, [device, form])
 
     function onSubmit(data: EditDeviceForm) {
-      editDevice(data, deviceId).then(() => setDialogOpen(false))
+      editDevice(data, deviceId).then(() => {
+        toast({
+          title: 'Successfully updated',
+          description: `${data.model} was updated`,
+        })
+        setDialogOpen(false)
+      })
     }
 
     return (
@@ -262,7 +269,7 @@ export const DeviceEditForm = observer(
                                     const files = event.target.files
                                     if (files) {
                                       if (
-                                        files.length === 1 &&
+                                        files?.length === 1 &&
                                         !fileList.find(
                                           (file) =>
                                             file.name === files?.[0].name
@@ -291,7 +298,7 @@ export const DeviceEditForm = observer(
                               </FormControl>
                               <FormMessage />
                             </FormItem>
-                            {form.getValues('image')?.length + value.length <=
+                            {form.getValues('image')?.length + value.length <
                               5 && (
                               <Button
                                 variant={'outline'}
@@ -317,13 +324,16 @@ export const DeviceEditForm = observer(
                     >
                       Cancel
                     </Button>
-                    <Button type="submit">Save</Button>
+                    <Button type="submit" disabled={!form.formState.isDirty}>
+                      Save
+                    </Button>
                   </DialogFooter>
                 </form>
               </Form>
             )}
           </DialogContent>
         </Dialog>
+        <Toaster />
       </>
     )
   }
