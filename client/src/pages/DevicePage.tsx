@@ -15,6 +15,7 @@ export const DevicePage = observer(() => {
   const {
     store: {
       deviceStore: { devices },
+      basketStore: { addToBasket },
     },
   } = useStore()
   const { id } = useParams()
@@ -59,7 +60,12 @@ export const DevicePage = observer(() => {
           <div className="flex flex-col justify-between border border-slate-300 rounded-3xl p-6">
             <div>{deviceInDb.price}р</div>
             <div>
-              <Button variant="secondary">Add to cart</Button>
+              <Button
+                variant="secondary"
+                onClick={() => addToBasket(deviceInDb)}
+              >
+                Add to cart
+              </Button>
             </div>
           </div>
         </div>
